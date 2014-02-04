@@ -1,5 +1,6 @@
 # functions
-export(MRFA,MRF, polys2nb, nb2prec, draw.polys, polys2polys, nb2nb, mrfa, gamlss.mrfa, mrf, gamlss.mrf)
+export(MRFA,MRF, polys2nb, nb2prec, draw.polys, polys2polys, nb2nb, mrfa, gamlss.mrfa, 
+       mrf, gamlss.mrf)
 
 S3method(fitted, MRF)
 S3method(coef, MRF)
@@ -11,6 +12,8 @@ S3method(plot, MRF)
 S3method(residuals, MRF)
 S3method(predict, MRF)
 
-importFrom(gamlss)
-importFrom(spam)
-importFrom(mgcv)
+importFrom(gamlss.dist, dNO, qNO, pNO)
+import(gamlss)
+import(spam)
+import(mgcv)
+

@@ -68,7 +68,7 @@ if (!is.null(polys)&&is.null(neighbour)&&is.null(precision))
    startLambdaName <- paste("start.Lambda",fourLetters, sep=".")
 ## put the starting values in the gamlss()environment
       weights.Adj  <- FALSE
-            sigmas <- c(control$sig2e, control$sig2b,weights.Adj)
+            sigmas <- c(control$sig2e, control$sig2b, weights.Adj)
             assign(startLambdaName, sigmas, envir = gamlss.env)
 #--------
                              xvar <- rep(0,length(x)) #  set x to zero
@@ -134,8 +134,7 @@ startLambdaName <- as.character(attr(x, "NameForLambda"))
               N <- length(y) # the no of observations
           tau2  <- sig2 <- NULL
 # now the action depends on the values of lambda and df
-#--------------------------------------------------------------------  
-      
+#--------------------------------------------------------------------      
 sigmasWEIGHT <- get(startLambdaName, envir=gamlss.env) ## geting the starting value
   #cat("sigmas", sigmas, "\n")
 sigmas <- sigmasWEIGHT[1:2]

@@ -254,6 +254,7 @@ nb2nb <-function(neighbour.nb)
   list(nb=newList)
 }
 
+
 #------------------------------------------------------------------------------
 #a function to get polygons from a S4 shape file and transfer it a format we can use  
 polys2polys<- function(object,neighbour.nb){#neighbour.nb is given because we need the names according the region.id
