@@ -203,7 +203,7 @@ MRFA <- function(y, x,
               aic = sum(weights*(-2*dNO(y, mu=fit$fv, sigma=sqrt(sig2e), log=TRUE)))+2*(fit$edf+1) , 
               sbc = sum(weights*(-2*dNO(y, mu=fit$fv, sigma=sqrt(sig2e), log=TRUE)))+log(nobs)*(fit$edf+1),
               deviance = sum(weights*(-2*dNO(y, mu=fit$fv, sigma=sqrt(sig2e), log=TRUE))))
-  class(fit) <- "MRF"
+  class(fit) <- c("MRF","GMRF")
   return(fit)     
 }
 #-------------------------------------------------------------------------------

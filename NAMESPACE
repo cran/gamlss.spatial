@@ -1,16 +1,15 @@
 # functions
-export(MRFA,MRF, polys2nb, nb2prec, draw.polys, polys2polys, nb2nb, mrfa, gamlss.mrfa, 
-       mrf, gamlss.mrf)
+export(MRFA,MRF, polys2nb, nb2prec, draw.polys, polys2polys, nb2nb, gmrf, gamlss.gmrf)
 
-S3method(fitted, MRF)
-S3method(coef, MRF)
-S3method(AIC, MRF)
-S3method(deviance,MRF)
-S3method(print, MRF)
-S3method(summary, MRF)
-S3method(plot, MRF)
-S3method(residuals, MRF)
-S3method(predict, MRF)
+S3method(fitted, GMRF)
+S3method(coef, GMRF)
+S3method(AIC, GMRF)
+S3method(deviance, GMRF)
+S3method(print, GMRF)
+S3method(summary, GMRF)
+S3method(plot, GMRF)
+S3method(residuals, GMRF)
+S3method(predict, GMRF)
 
 importFrom(gamlss.dist, dNO, qNO, pNO)
 importFrom("grDevices", "gray", "heat.colors", "rainbow", "terrain.colors", "topo.colors", "cm.colors", "colorRamp", "rgb")

@@ -268,7 +268,7 @@ attributes(sig2b) <- NULL
                           aic = sum(weights*(-2*dNO(y, mu=fv, sigma=sqrt(exp(out$par[1])), log=TRUE)))+2*(tr1+1) , 
                           sbc = sum(weights*(-2*dNO(y, mu=fv, sqrt(exp(out$par[1])), log=TRUE)))+log(nobs)*(tr1+1),#
                      deviance = sum(weights*(-2*dNO(y, mu=fv, sigma=sqrt(exp(out$par[1])), log=TRUE))))
-           class(fit) <- c( "MRF")
+           class(fit) <- c( "MRF", "GMRF")
   fit
   }
 # functions 4 disSmo methods
@@ -278,7 +278,7 @@ attributes(sig2b) <- NULL
 #----------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------
-# functions for MRF methods
+# functions for GMRF methods
 #----------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------
@@ -286,13 +286,13 @@ attributes(sig2b) <- NULL
 #----------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------                    
-fitted.MRF<-function(object,...) 
+fitted.GMRF<-function(object,...) 
 {
   object$fitted
 }
 #-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
-coef.MRF<-function(object,...) 
+coef.GMRF<-function(object,...) 
 {
   coef <- object$par[["par"]]
   attr(coef, "se") <-  object$par[["se"]]
@@ -300,7 +300,7 @@ coef.MRF<-function(object,...)
 }
 #-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
-residuals.MRF<-function(object,type = c("z-scores", "simple"), ...) 
+residuals.GMRF<-function(object,type = c("z-scores", "simple"), ...) 
 {
   type <- match.arg(type)
   res <- if (type == "z-scores") 
@@ -315,7 +315,7 @@ residuals.MRF<-function(object,type = c("z-scores", "simple"), ...)
 }
 #-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
-AIC.MRF <- function(object, ...,k=2,type = c("GD", "marginal"))
+AIC.GMRF <- function(object, ...,k=2,type = c("GD", "marginal"))
 {
   type <- match.arg(type)
   if (type == "GD")
@@ -337,7 +337,7 @@ AIC.MRF <- function(object, ...,k=2,type = c("GD", "marginal"))
     }
     else 
     {
-      val <- if (is(object, "MRF")) 
+      val <- if (is(object, "GMRF")) 
         object$deviance + (object$df) * k
       else stop(paste("this is not a disSmo object"))
     }   
@@ -362,7 +362,7 @@ AIC.MRF <- function(object, ...,k=2,type = c("GD", "marginal"))
     }
     else 
     {
-      val <- if (is(object, "MRF")) 
+      val <- if (is(object, "GMRF")) 
         object$deviance.Q + 2 * k
       else stop(paste("this is not a disSmo object"))
     }   
@@ -371,7 +371,7 @@ AIC.MRF <- function(object, ...,k=2,type = c("GD", "marginal"))
 }
 #-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
-deviance.MRF<-function(object,type = c("GD", "marginal"), ...) 
+deviance.GMRF<-function(object,type = c("GD", "marginal"), ...) 
 {
   type <- match.arg(type)
   if (type == "GD") return(object$deviance)
@@ -379,7 +379,7 @@ deviance.MRF<-function(object,type = c("GD", "marginal"), ...)
 }
 #-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
-plot.MRF <- function (x, xvar=NULL, parameters=NULL, ts=FALSE, summaries=TRUE, ...) 
+plot.GMRF <- function (x, xvar=NULL, parameters=NULL, ts=FALSE, summaries=TRUE, ...) 
 {
   residx <- resid(x) # get the residuals 
   w <- x$weights
@@ -474,7 +474,7 @@ plot.MRF <- function (x, xvar=NULL, parameters=NULL, ts=FALSE, summaries=TRUE, .
 }
 #-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
-print.MRF  <- function (x, digits = max(3, getOption("digits") - 3), ...) 
+print.GMRF  <- function (x, digits = max(3, getOption("digits") - 3), ...) 
 {   
   cat("\nMarkov Random Fields fit", "\n")
   cat("Fitting method:", deparse(x$method), "\n")
@@ -495,7 +495,7 @@ print.MRF  <- function (x, digits = max(3, getOption("digits") - 3), ...)
 }
 #-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
-summary.MRF  <- function (object, digits = max(3, getOption("digits") - 3), ...) 
+summary.GMRF  <- function (object, digits = max(3, getOption("digits") - 3), ...) 
 {   
   cat("\nMarkov Random Fields fit\n")
   cat("Fitting method:", deparse(object$method), "\n")
@@ -520,7 +520,7 @@ summary.MRF  <- function (object, digits = max(3, getOption("digits") - 3), ...)
 }
 #-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
-logLik.MRF <- function (object, ...) 
+logLik.GMRF <- function (object, ...) 
 {
   val <- -object$deviance/2
   attr(val, "nall") <- object$N
@@ -532,7 +532,7 @@ logLik.MRF <- function (object, ...)
 # methods are finish here    
 #---------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------
-predict.MRF <- function(object, newdata=NULL, ...)
+predict.GMRF <- function(object, newdata=NULL, ...)
 {
 if (is.null(newdata)) pred  <- fitted(object)
          else
