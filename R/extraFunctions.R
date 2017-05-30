@@ -123,7 +123,6 @@ draw.polys <-function( polys,
                    swapcolors = FALSE,
                         n.col = 100,...)
   {
-  
 ## to get the range of all polygons    
   for (i in 1:length(polys)) {
     yr <- range(polys[[i]][, 2], na.rm = TRUE)
@@ -156,7 +155,7 @@ draw.polys <-function( polys,
   else 
   { # if object is defined  we must two alternatives
     ## i) it is MRF object
-    ## ii) a list which defines the values and the areas  
+    ## ii) a vector which defines the values and has names the areas  
     if(any(class(object)=="MRF"))
       {
       y.y <- object$beta 

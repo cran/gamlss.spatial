@@ -4,7 +4,7 @@
 \docType{package}
 \title{Spatial models within gamlss}
 \description{
-This package provides a set of functions to facilitate the fitting of spatial models within GAMLSS. At the moment it allows only Random Markov Fiels (MRF) but other facilities will be added soon.}
+This package provides a set of functions to facilitate the fitting of spatial models within GAMLSS. At the moment it allows only Gaussian  Markov Random Fiels (GMRF) but other facilities will be added soon.}
 \details{
 \tabular{ll}{
 Package: \tab gamlss.spatial\cr

@@ -76,11 +76,11 @@ MRFA <- function(y, x,
   ##------------------------------------------------------------------------------
   scall <- deparse(sys.call(), width.cutoff = 500L)
   if (!is(x, "factor")) stop("x must be a factor")
-  N <- length(y)
+       N <- length(y)
   if (any(is.na(weights))) weights[is.na(weights)] <- 0
-  nobs <- sum(!weights==0)
+    nobs <- sum(!weights==0)
   # if (N>nobs) warning("some observations are weighted out")
-  k <- area
+      k <- area
   if (is.null(k)) k <- factor(levels(x),levels=levels(x)) # default knots = all regions are in the data
   #the line above can change the order of the precision matrix
   else{
@@ -92,9 +92,9 @@ MRFA <- function(y, x,
     stop("MRF basis dimension set too high")
   if (sum(!levels(x)%in%levels(k))) 
     stop("data contain regions that are not contained in the area specification")
-  x <- factor(x,levels=levels(k))
-  X <- model.matrix(~x-1,) 
-  nfv <- nlevels(x)
+       x <- factor(x,levels=levels(k))
+       X <- model.matrix(~x-1,) 
+     nfv <- nlevels(x)
   if (is.null(precision)&&is.null(neighbour)&&is.null(polys))
     stop("precision matrix, boundary polygons and/or neighbours list must be supplied")
   if (!is.null(precision))
@@ -203,7 +203,7 @@ MRFA <- function(y, x,
               aic = sum(weights*(-2*dNO(y, mu=fit$fv, sigma=sqrt(sig2e), log=TRUE)))+2*(fit$edf+1) , 
               sbc = sum(weights*(-2*dNO(y, mu=fit$fv, sigma=sqrt(sig2e), log=TRUE)))+log(nobs)*(fit$edf+1),
               deviance = sum(weights*(-2*dNO(y, mu=fit$fv, sigma=sqrt(sig2e), log=TRUE))))
-  class(fit) <- c("MRF","GMRF")
+  class(fit) <- c("MRF")
   return(fit)     
 }
 #-------------------------------------------------------------------------------
