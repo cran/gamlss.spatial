@@ -4,7 +4,9 @@
 # i)   method
 #------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
-gmrf<-function(x, precision=NULL, neighbour=NULL, polys= NULL, area=NULL, adj.weight=1000,  df=NULL, start=10, method=c("Q", "A"),  control=gmrf.control(...), ...)  
+gmrf<-function(x, precision=NULL, neighbour=NULL, polys= NULL, area=NULL, 
+               adj.weight=1000,  df=NULL, lambda=NULL, start=10, 
+               method=c("Q", "A"),  control=gmrf.control(...), ...)  
 {
 # -----------------------------------------------------------------------------
             scall  <- deparse(sys.call(), width.cutoff = 500L)
@@ -79,8 +81,8 @@ if (!is.null(polys)&&is.null(neighbour)&&is.null(precision))
       weights.Adj  <- FALSE
    if (method=="A")
    {
-           lambda <- c(start, weights.Adj)
-     assign(startLambdaName, lambda, envir = gamlss.env)
+           sigmas <- c(start, weights.Adj)
+     assign(startLambdaName, sigmas, envir = gamlss.env)
    } else
    {
            sigmas <- c(control$sig2e, control$sig2b, weights.Adj)
@@ -99,6 +101,7 @@ if (!is.null(polys)&&is.null(neighbour)&&is.null(precision))
       attr(xvar, "NameForLambda") <- startLambdaName
       attr(xvar, "method")        <- method
       attr(xvar, "df")            <- df
+      attr(xvar, "lambda")        <- lambda
       attr(xvar, "class")         <- "smooth"
       xvar
 }
@@ -150,7 +153,8 @@ gamlss.gmrf <- function(x, y, w, xeval = NULL, ...)
 startLambdaName <- as.character(attr(x, "NameForLambda")) 
          method <- as.character(attr(x, "method"))
              df <- attr(x, "df")
-         # order <- control$order # the order of the penalty matrix
+         lambda <- attr(x, "lambda")
+        # order <- control$order # the order of the penalty matrix
               N <- length(y) # the no of observations
           tau2  <- sig2 <- NULL
 # now the action depends on the values of lambda and df
@@ -189,23 +193,23 @@ if (method=="Q")
 else # if alternate
 {
   lambdaWEIGHT <- get(startLambdaName, envir=gamlss.env) ## geting the starting val
-    lambda <- lambdaWEIGHT[1]
+    start <- lambdaWEIGHT[1]
   ifWeiAdj <- lambdaWEIGHT[2]
   if (!ifWeiAdj) 
   {
-    fit <- MRFA( y, xvar, precision=precision, area=area, weights=w, start=lambda)
+    fit <- MRFA( y, xvar, precision=precision, area=area, weights=w, start=start, df=df, lambda=lambda)
     if (any(coef(fit)<1e-8))
     {
-      fit <- MRFA( y, xvar, precision=precision, area=area, weights=w*adj.weight, start=lambda)
+      fit <- MRFA( y, xvar, precision=precision, area=area, weights=w*adj.weight, start=start, df=df, lambda=lambda)
       ifWeiAdj <- TRUE 
     }
   }
   else 
   {
-    fit <- MRFA( y, xvar, precision=precision, area=area, weights=w*adj.weight, start=lambda)
+    fit <- MRFA( y, xvar, precision=precision, area=area, weights=w*adj.weight, start=start, df=df, lambda=lambda)
   }
-  lambda <- c(fit$lambda, ifWeiAdj) 
-  assign(startLambdaName, lambda, envir=gamlss.env)
+  lambdas <- c(fit$lambda, ifWeiAdj) 
+  assign(startLambdaName, lambdas, envir=gamlss.env)
 }
 
 #cat(coef(fit),"\n")

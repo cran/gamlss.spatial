@@ -25,12 +25,12 @@ MRFA <- function(y, x,
   regpen <- function(y, weights, lambda)  
   {
     # fv <- solve(W+lambda*G,  weights*y)
-    beta <- solve(XWX + lambda*G, XWy) 
-    names(beta) <- levels(x)
-    fv <- beta[x]              
-    H <- solve(XWX + lambda*G, XWX)
-    edf <- sum(diag(H))
-    fit <- list(fv=fv, beta=beta, edf=edf, var=diag(H))
+          beta <- solve(XWX + lambda*G, XWy) 
+   names(beta) <- levels(x)
+            fv <- beta[x]              
+             H <- solve(XWX + lambda*G, XWX)
+           edf <- sum(diag(H))
+           fit <- list(fv=fv, beta=beta, edf=edf, var=diag(H))
     fit 
   }
   ##-----------------------------------------------------------------------------
@@ -145,7 +145,7 @@ MRFA <- function(y, x,
     lambda <- start
     for (it in 1:200) 
     {
-      fit <- regpen(y, weights=weights, lambda=lambda)
+         fit <- regpen(y, weights=weights, lambda=lambda)
       gamma. <- fit$beta
       fv <- fit$fv          
       sig2e <- sum(weights * (y - fv) ^ 2) / (nobs - fit$edf)
