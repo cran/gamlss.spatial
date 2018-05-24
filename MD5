@@ -1,11 +1,12 @@
-c0131e6f9430c0d8a57fe2306d4c6fc8 *DESCRIPTION
+c0819b1a6517647d0ce174072e5b63f8 *DESCRIPTION
 1d15a2edbd5212468968d601d9cda0a2 *NAMESPACE
 a96e64e89b3926ac6a3c6b7a9269830d *R/MRF.R
 73b4cc01f91cc18a2906c405310bac67 *R/MRFA.R
 9476b4298d2f73714615ed90d8d7170f *R/extraFunctions.R
 9accf8dbea91df88dd26a54e6cb02732 *R/gmrf-for-gamlss.R
 70d1c142b4a7d63089e659c433695b15 *R/mrf-for-gamlss.R
+951c3d9495d40686b777ab2eb1f9bc9d *build/partial.rdb
 1a3a99b87d44fc240f8aa84f4c985f14 *man/MRF.Rd
 0beae8cc852165bf9856040bca07d6eb *man/draw.polys.Rd
 9b2b7b3d6dc85990278ad8a3410fbb36 *man/gamlss.gmrf.Rd
-941fab415eb8b75bb486c6564404942a *man/gamlss.spatial-package.Rd
+e5e5c84f72b08a1633663be854791eed *man/gamlss.spatial-package.Rd
