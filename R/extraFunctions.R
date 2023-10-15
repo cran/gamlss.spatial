@@ -79,8 +79,9 @@ nb2prec <- function(neighbour,x,area=NULL)
   if (is.null(k))
     k <- factor(levels(x),levels=levels(x)) # default knots = all regions in the data
   else{
-    if (class(area)=="character") k <- as.factor(k)
-    if (!(class(k)=="character"||class(k)=="factor")) stop("area must be a factor or a chacacter vector")
+    if (is(area,"character")) k <- as.factor(k)
+    if (!(is(k,"character")||is(k,"factor"))) 
+      stop("area must be a factor or a chacacter vector")
   }
   if (length(levels(x))>length(levels(k))) stop("MRF basis dimension set too high")
   if (sum(!levels(x)%in%levels(k))) stop("data contain regions that are not contained in the area specification") 

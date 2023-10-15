@@ -16,8 +16,8 @@ if (!is(x, "factor")) stop("x must be a factor")
 k <- area
 if (is.null(k)) k <- factor(levels(x),levels=levels(x)) # default knots = all regions are in 
 else{
-  if (class(area)=="character") k <- as.factor(k)
-  if (!(class(k)=="character"||class(k)=="factor")) 
+  if (is(area,"character")) k <- as.factor(k)
+  if (!(is(k,"character")||is(k,"factor"))) 
     stop("area must be a factor or a chacacter vector")
 }
 if (length(levels(x))>length(levels(k))) 

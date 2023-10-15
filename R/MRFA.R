@@ -70,45 +70,45 @@ MRFA <- function(y, x,
     }
     G
   }
-  ## end of local functions 
-  ##------------------------------------------------------------------------------
-  ##------------------------------------------------------------------------------
-  ##------------------------------------------------------------------------------
-  scall <- deparse(sys.call(), width.cutoff = 500L)
-  if (!is(x, "factor")) stop("x must be a factor")
+## end of local functions 
+##------------------------------------------------------------------------------
+##------------------------------------------------------------------------------
+##------------------------------------------------------------------------------
+   scall <- deparse(sys.call(), width.cutoff = 500L)
+if (!is(x, "factor")) stop("x must be a factor")
        N <- length(y)
-  if (any(is.na(weights))) weights[is.na(weights)] <- 0
+if (any(is.na(weights))) weights[is.na(weights)] <- 0
     nobs <- sum(!weights==0)
-  # if (N>nobs) warning("some observations are weighted out")
+# if (N>nobs) warning("some observations are weighted out")
       k <- area
-  if (is.null(k)) k <- factor(levels(x),levels=levels(x)) # default knots = all regions are in the data
+if (is.null(k)) k <- factor(levels(x),levels=levels(x)) # default knots = all regions are in the data
   #the line above can change the order of the precision matrix
-  else{
-    if (class(area)=="character") k <- as.factor(k)
-    if (!(class(k)=="character"||class(k)=="factor")) 
+else{
+    if (is(area=="character"))   k <- as.factor(k)
+    if (!(is(k,"character")||is(k,"factor"))) 
       stop("area must be a factor or a chacacter vector")
-  }
-  if (length(levels(x))>length(levels(k))) 
+    }
+if (length(levels(x))>length(levels(k))) 
     stop("MRF basis dimension set too high")
-  if (sum(!levels(x)%in%levels(k))) 
+if (sum(!levels(x)%in%levels(k))) 
     stop("data contain regions that are not contained in the area specification")
        x <- factor(x,levels=levels(k))
        X <- model.matrix(~x-1,) 
      nfv <- nlevels(x)
-  if (is.null(precision)&&is.null(neighbour)&&is.null(polys))
+if (is.null(precision)&&is.null(neighbour)&&is.null(polys))
     stop("precision matrix, boundary polygons and/or neighbours list must be supplied")
-  if (!is.null(precision))
+if (!is.null(precision))
   { 
     if (!is.matrix(precision)||dim(precision)[1]!=nfv||dim(precision)[2]!=nfv) 
       stop("the precision matrix is not suitable")
     G <- precision 
   } 
-  # check the precision matrix
-  if (!is.null(neighbour)&&is.null(precision))
+# check the precision matrix
+if (!is.null(neighbour)&&is.null(precision))
   { # if neighbour exits then calculate the precision
     G   <- nb2prec(neighbour)
   }
-  if (!is.null(polys)&&is.null(neighbour)&&is.null(precision))  
+if (!is.null(polys)&&is.null(neighbour)&&is.null(precision))  
   { # if polys exits then calculate the precision
     a.name <- names(polys)
     d.name <- unique(a.name[duplicated(a.name)])
@@ -159,50 +159,53 @@ MRFA <- function(y, x,
   } 
   else # case 3 : if df are required---------------------------------
 {
-  QR <- qr(sqrt(weights)*X)
-  Rinv <- solve(qr.R(QR))
-  UDU <- eigen(t(Rinv)%*%G%*%Rinv)           
+      QR <- qr(sqrt(weights)*X)
+    Rinv <- solve(qr.R(QR))
+     UDU <- eigen(t(Rinv)%*%G%*%Rinv)           
   lambda <- if (sign(edf1_df(0))==sign(edf1_df(100000))) 100000  # in case they have the some sign
   else  uniroot(edf1_df, c(0,100000))$root
   # if (any(class(lambda)%in%"try-error")) {lambda<-100000}   
-  fit <- regpen(y, weights, lambda)
-  #  fv <- X %*% fit$beta          
+     fit <- regpen(y, weights, lambda)
+  #   fv <- X %*% fit$beta          
 }
   
-  # fit <- regpen(y, weights=weights, lambda=lambda) 
-  sig2e <- sum(weights * (y - fit$fv) ^ 2) / (nobs - fit$edf)
-  sig2b <- sum(t(fit$beta)%*%G%*%fit$beta)/(fit$edf)   
-  par <- c(log(sig2e), log(sig2b))
+   # fit <- regpen(y, weights=weights, lambda=lambda) 
+   sig2e <- sum(weights * (y - fit$fv) ^ 2) / (nobs - fit$edf)
+   sig2b <- sum(t(fit$beta)%*%G%*%fit$beta)/(fit$edf)   
+   par <- c(log(sig2e), log(sig2b))
   names(par) <- c("log(sige^2)", "log(sigb^2)")
   # saving stuff 
   fit <- list(fitted = fit$fv, 
-              df = fit$edf, 
+                  df = fit$edf, 
               lambda = lambda, 
-              sig2e =  sig2e, 
-              sige = sqrt(sig2e),
-              sig2b = sig2b,
-              sigb = sqrt(sig2b),
-              par = list(par=par, se=c(NA_real_, NA_real_)), # rubish ???
-              y = y,
-              x = x, 
+               sig2e =  sig2e, 
+                sige = sqrt(sig2e),
+               sig2b = sig2b,
+                sigb = sqrt(sig2b),
+                 par = list(par=par, se=c(NA_real_, NA_real_)), # rubish ???
+                   y = y,
+                   x = x, 
               # sumW = (sum(weights*(y-fit$fv)^2)),
-              nobs = nobs,  
+                nobs = nobs,  
               #gaGga = sum(t(fit$beta)%*%G%*%fit$beta), 
-              beta = fit$beta, # test
+                beta = fit$beta, # test
               # XWX = XWX,
               # XWy = XWy,
-              G = G, 
-              var = fit$var[x],
-              method = "altenating",
-              value.of.Q = NULL,
-              deviance.Q = 0,
-              weights = weights,
-              N = N,
-              call = scall,
-              rss = sum(weights*(y-fit$fv)^2),
-              aic = sum(weights*(-2*dNO(y, mu=fit$fv, sigma=sqrt(sig2e), log=TRUE)))+2*(fit$edf+1) , 
-              sbc = sum(weights*(-2*dNO(y, mu=fit$fv, sigma=sqrt(sig2e), log=TRUE)))+log(nobs)*(fit$edf+1),
-              deviance = sum(weights*(-2*dNO(y, mu=fit$fv, sigma=sqrt(sig2e), log=TRUE))))
+                  G = G, 
+                var = fit$var[x],
+             method = "altenating",
+         value.of.Q = NULL,
+         deviance.Q = 0,
+            weights = weights,
+                  N = N,
+               call = scall,
+                rss = sum(weights*(y-fit$fv)^2),
+                aic = sum(weights*(-2*dNO(y, mu=fit$fv, sigma=sqrt(sig2e), 
+                                    log=TRUE)))+2*(fit$edf+1) , 
+              sbc = sum(weights*(-2*dNO(y, mu=fit$fv, sigma=sqrt(sig2e), 
+                                    log=TRUE)))+log(nobs)*(fit$edf+1),
+              deviance = sum(weights*(-2*dNO(y, mu=fit$fv, sigma=sqrt(sig2e), 
+                                    log=TRUE))))
   class(fit) <- c("MRF")
   return(fit)     
 }

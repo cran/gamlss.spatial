@@ -27,8 +27,8 @@ if (!is(x, "factor")) stop("x must be a factor")
      k <- area
 if (is.null(k)) k <- factor(levels(x),levels=levels(x)) # default knots = all regions are in 
 else{
-  if (class(area)=="character") k <- as.factor(k)
-  if (!(class(k)=="character"||class(k)=="factor")) 
+  if (is(area,"character")) k <- as.factor(k)
+  if (!(is(k,"character")||is(k,"factor"))) 
     stop("area must be a factor or a chacacter vector")
 }
 if (length(levels(x))>length(levels(k))) 
@@ -161,7 +161,7 @@ startLambdaName <- as.character(attr(x, "NameForLambda"))
 #--------------------------------------------------------------------      
 if (method=="Q")
  {
-  sigmasWEIGHT <- get(startLambdaName, envir=gamlss.env) ## geting the starting value
+  sigmasWEIGHT <- get(startLambdaName, envir=gamlss.env) ## getting the starting value
   #cat("sigmas", sigmas, "\n")
   sigmas <- sigmasWEIGHT[1:2]
   ifWeiAdj <- sigmasWEIGHT[3]
@@ -187,7 +187,7 @@ if (method=="Q")
                sig2e.fix = control$sig2e.fix, sig2b.fix = control$sig2b.fix,  
                penalty = control$penalty,  delta = control$delta, shift = control$shift)
   }
-       sigmas <- c(fit$sig2e, fit$sig2b,ifWeiAdj)
+       sigmas <- c(fit$sig2e, fit$sig2b, ifWeiAdj)
        assign(startLambdaName, sigmas, envir=gamlss.env)
  }
 else # if alternate
@@ -200,7 +200,7 @@ else # if alternate
     fit <- MRFA( y, xvar, precision=precision, area=area, weights=w, start=start, df=df, lambda=lambda)
     if (any(coef(fit)<1e-8))
     {
-      fit <- MRFA( y, xvar, precision=precision, area=area, weights=w*adj.weight, start=start, df=df, lambda=lambda)
+    fit <- MRFA( y, xvar, precision=precision, area=area, weights=w*adj.weight, start=start, df=df, lambda=lambda)
       ifWeiAdj <- TRUE 
     }
   }
